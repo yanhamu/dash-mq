@@ -1,5 +1,7 @@
-using DashMq.Web.Features.Datapoints;
+using DashMq.DataAccess;
+using DashMq.DataAccess.Repositories;
 using DashMq.Web.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -13,10 +15,16 @@ public class Program
 
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddTransient<IReadDatapointHandler, ReadDatapointHandler>();
+        builder.Services.AddTransient<IDatapointRepository, DatapointRepository>();
+        builder.Services.AddTransient<IDatapointValueRepository, DatapointValueRepository>();
 
         builder.Services.AddSingleton<IMqttClient>(_ => new MqttFactory().CreateMqttClient());
         builder.Services.AddHostedService<SubscriberService>();
+
+        builder.Services.AddDbContext<DashDbContext>(options =>
+        {
+            options.UseSqlite(connectionString: builder.Configuration.GetConnectionString("DefaultConnection"));
+        });
 
         var app = builder.Build();
 

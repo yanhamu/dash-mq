@@ -1,3 +1,5 @@
+@model DashMq.Web.Features.Datapoints.DatapointModel[]
+
 @{
     ViewData["Title"] = "Datapoints";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -5,4 +7,24 @@
 
 <div>
     <h1>Datapoints</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var v in @Model)
+        {
+            <tr>
+                <td>@v.Id</td>
+                <td>@v.Name</td>
+                <td>@v.Id</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
 </div>

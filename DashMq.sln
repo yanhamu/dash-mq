@@ -2,13 +2,15 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.Web", "src\DashMq.Web\DashMq.Web.csproj", "{761E9D59-7B12-494F-B4F4-1B959C571B2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.Broker", "src\DashMq.Broker\DashMq.Broker.csproj", "{D866E8B8-1DC7-4A57-8743-82659CB9F2DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.Broker.Cli", "src\DashMq.Broker.Cli\DashMq.Broker.Cli.csproj", "{D866E8B8-1DC7-4A57-8743-82659CB9F2DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalSetup", "LocalSetup", "{5ACB9655-2A32-4D5D-A0D7-895EF4F7AEC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.Publisher.Cli", "src\DashMq.Publisher.Cli\DashMq.Publisher.Cli.csproj", "{1FBD5462-2726-44F4-B30E-73398D77DD59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.Subscriber.Cli", "src\DashMq.Subscriber.Cli\DashMq.Subscriber.Cli.csproj", "{9928AFC9-A84E-41D2-9B62-B7595435C962}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashMq.DataAccess", "src\DashMq.DataAccess\DashMq.DataAccess.csproj", "{97B6E6A8-E7B1-4D0C-863F-43DBE0B5681A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +34,14 @@ Global
 		{9928AFC9-A84E-41D2-9B62-B7595435C962}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9928AFC9-A84E-41D2-9B62-B7595435C962}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9928AFC9-A84E-41D2-9B62-B7595435C962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97B6E6A8-E7B1-4D0C-863F-43DBE0B5681A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B6E6A8-E7B1-4D0C-863F-43DBE0B5681A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B6E6A8-E7B1-4D0C-863F-43DBE0B5681A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B6E6A8-E7B1-4D0C-863F-43DBE0B5681A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1FBD5462-2726-44F4-B30E-73398D77DD59} = {5ACB9655-2A32-4D5D-A0D7-895EF4F7AEC4}
 		{9928AFC9-A84E-41D2-9B62-B7595435C962} = {5ACB9655-2A32-4D5D-A0D7-895EF4F7AEC4}
+		{D866E8B8-1DC7-4A57-8743-82659CB9F2DB} = {5ACB9655-2A32-4D5D-A0D7-895EF4F7AEC4}
 	EndGlobalSection
 EndGlobal
