@@ -1,3 +1,8 @@
+using DashMq.Web.Features.Datapoints;
+using DashMq.Web.Infrastructure;
+using MQTTnet;
+using MQTTnet.Client;
+
 namespace DashMq.Web;
 
 public class Program
@@ -6,16 +11,18 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddTransient<IReadDatapointHandler, ReadDatapointHandler>();
+
+        builder.Services.AddSingleton<IMqttClient>(_ => new MqttFactory().CreateMqttClient());
+        builder.Services.AddHostedService<SubscriberService>();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 

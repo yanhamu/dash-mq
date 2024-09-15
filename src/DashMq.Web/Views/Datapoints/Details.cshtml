@@ -1,0 +1,29 @@
+@model DashMq.Web.Features.Datapoints.DatapointModel?
+
+@{
+    ViewBag.Title = "Datapoint";
+    Layout = "_Layout";
+}
+
+<h2>Datapoint</h2>
+
+<p>@Model?.Id</p>
+<p>@Model?.Name</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var v in @Model?.Values ?? [])
+    {
+        <tr>
+            <td>@v.Timestamp</td>
+            <td>@v.Value</td>
+        </tr>
+    }
+    </tbody>
+</table>
