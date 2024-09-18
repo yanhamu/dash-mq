@@ -8,20 +8,34 @@
 <div>
     <h1>Datapoints</h1>
 
-    <table>
+    <a href="@Url.Action("New")" class="btn btn-success mb-4">Create New DataPoint</a>
+    
+    <table class="table table-striped">
         <thead>
         <tr>
-            <th>Timestamp</th>
-            <th>Value</th>
+            <th>Name</th>
+            <th>Topic</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var v in @Model)
         {
             <tr>
-                <td>@v.Id</td>
-                <td>@v.Name</td>
-                <td>@v.Id</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = v.Id })">
+                        @v.Name
+                    </a>
+                </td>
+                <td>@v.Topic</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = v.Id })" class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = v.Id })" class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
             </tr>
         }
         </tbody>

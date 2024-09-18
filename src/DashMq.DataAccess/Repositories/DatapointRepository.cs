@@ -14,4 +14,19 @@ public class DatapointRepository(DashDbContext context) : IDatapointRepository
     {
         return context.Datapoints.ToArrayAsync(cancellationToken);
     }
+
+    public void Add(Datapoint datapoint)
+    {
+        context.Datapoints.Add(datapoint);
+    }
+
+    public Task SaveAsync(CancellationToken cancellationToken)
+    {
+        return context.SaveChangesAsync(cancellationToken);
+    }
+
+    public void Remove(Datapoint datapoint)
+    {
+        context.Datapoints.Remove(datapoint);
+    }
 }

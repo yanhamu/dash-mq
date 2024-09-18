@@ -1,14 +1,24 @@
-@model DashMq.Web.Features.Datapoints.DatapointModel?
+@model DashMq.Web.Features.Datapoints.DatapointModel
 
 @{
     ViewBag.Title = "Datapoint";
     Layout = "_Layout";
 }
 
-<h2>Datapoint</h2>
+<h2>DataPoint Details</h2>
 
-<p>@Model?.Id</p>
-<p>@Model?.Name</p>
+<div class="card">
+    <div class="card-header">
+        DataPoint ID: @Model.Id
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Name: @Model.Name</h5>
+        <p class="card-text"><strong>Topic:</strong> @Model.Topic</p>
+    </div>
+</div>
+
+<a href="@Url.Action("List")" class="btn btn-primary mt-3">Back to List</a>
+
 
 <table>
     <thead>
@@ -18,7 +28,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var v in @Model?.Values ?? [])
+    @foreach (var v in @Model.Values)
     {
         <tr>
             <td>@v.Timestamp</td>
