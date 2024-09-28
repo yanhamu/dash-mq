@@ -1,0 +1,26 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DashMq.Web.Features.Datapoints.DatapointModel
+
+<h2>Edit DataPoint</h2>
+
+<form asp-action="Edit" method="post" class="form-horizontal">
+    <div class="mb-3">
+        <label for="Id" class="form-label">ID:</label>
+        <input type="text" class="form-control" id="Id" name="Id" value="@Model.Id" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name:</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Topic" class="form-label">Topic:</label>
+        <input type="text" class="form-control" id="Topic" name="Topic" value="@Model.Topic" />
+    </div>
+
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="@Url.Action("List")" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

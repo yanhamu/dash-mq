@@ -1,7 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Server;
 
-namespace DashMq.Broker;
+namespace DashMq.Broker.Cli;
 
 class Program
 {

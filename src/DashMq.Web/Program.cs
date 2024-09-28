@@ -1,3 +1,10 @@
+using DashMq.DataAccess;
+using DashMq.DataAccess.Repositories;
+using DashMq.Web.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using MQTTnet;
+using MQTTnet.Client;
+
 namespace DashMq.Web;
 
 public class Program
@@ -6,16 +13,24 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddTransient<IDatapointRepository, DatapointRepository>();
+        builder.Services.AddTransient<IDatapointValueRepository, DatapointValueRepository>();
+
+        builder.Services.AddSingleton<IMqttClient>(_ => new MqttFactory().CreateMqttClient());
+        builder.Services.AddHostedService<SubscriberService>();
+
+        builder.Services.AddDbContext<DashDbContext>(options =>
+        {
+            options.UseSqlite(connectionString: builder.Configuration.GetConnectionString("DefaultConnection"));
+        });
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
