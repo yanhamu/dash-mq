@@ -12,7 +12,9 @@ class Program
         // The port for the default endpoint is 1883.
         // The default endpoint is NOT encrypted!
         // Use the builder classes where possible.
-        var mqttServerOptions = new MqttServerOptionsBuilder().WithDefaultEndpoint().Build();
+        var mqttServerOptions = new MqttServerOptionsBuilder()
+            .WithDefaultEndpoint()
+            .Build();
 
         // The port can be changed using the following API (not used in this example).
         // new MqttServerOptionsBuilder()
