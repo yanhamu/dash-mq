@@ -13,6 +13,9 @@ class Program
         // The default endpoint is NOT encrypted!
         // Use the builder classes where possible.
         var mqttServerOptions = new MqttServerOptionsBuilder()
+            .WithoutDefaultEndpoint()
+            //.WithDefaultEndpointPort(1883)
+            //.WithDefaultEndpointBoundIPAddress(IPAddress.Loopback)
             .WithDefaultEndpoint()
             .Build();
 
@@ -28,8 +31,13 @@ class Program
         await mqttServer.StartAsync();
         Console.WriteLine("MqttServer is running...");
 
-        Console.WriteLine("Press Enter to exit.");
-        Console.ReadLine();
+        var s = "";
+        do
+        {
+            Console.WriteLine("Write 'exit' to exit.");
+            s = Console.ReadLine();
+        } while (s != "exit");
+
 
         // Stop and dispose the MQTT server if it is no longer needed!
         await mqttServer.StopAsync();
@@ -38,6 +46,8 @@ class Program
     private static Task OnPublish(InterceptingPublishEventArgs arg)
     {
         Console.WriteLine("received message");
+        Console.WriteLine($"topic alias:{arg.ApplicationMessage.TopicAlias} topic:{arg.ApplicationMessage.Topic}");
+        Console.WriteLine($"message:{arg.ApplicationMessage.ConvertPayloadToString()}");
         return Task.CompletedTask;
     }
 }

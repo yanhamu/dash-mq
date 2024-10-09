@@ -1,3 +1,4 @@
+using System.Text.Json;
 using DashMq.DataAccess;
 using DashMq.DataAccess.Model;
 using MQTTnet;
@@ -8,14 +9,15 @@ namespace DashMq.Web.Infrastructure;
 
 public class SubscriberService(
     IServiceProvider services,
-    IMqttClient mqttClient) : IHostedService
+    IMqttClient mqttClient,
+    MqttBrokerConfiguration config) : IHostedService
 {
     private Dictionary<string, int> datapointsMap = new();
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var options = new MqttClientOptionsBuilder()
-            .WithTcpServer("127.0.0.1")
+            .WithTcpServer(config.TcpHost)
             .Build();
 
         var subscriberOptionsBuilder = new MqttClientSubscribeOptionsBuilder();
@@ -35,7 +37,7 @@ public class SubscriberService(
         await mqttClient.ConnectAsync(options, cancellationToken);
         mqttClient.ApplicationMessageReceivedAsync += MessageReceivedAsync;
 
-        await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
+        var xxx = await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
     }
 
     private async Task<Datapoint[]> GetDatapoints(CancellationToken cancellationToken)
@@ -58,10 +60,18 @@ public class SubscriberService(
         if (!datapointId.HasValue)
             return;
 
-        var measurement = Convert.ToDouble(arg.ApplicationMessage.ConvertPayloadToString());
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
-        var value = new DatapointValue { Value = measurement, Timestamp = timestamp, DatapointId = datapointId.Value };
+        var measurement = JsonSerializer.Deserialize<Message>(arg.ApplicationMessage.ConvertPayloadToString(), options);
+        if (measurement == null)
+            return;
+
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        var value = new DatapointValue { Value = measurement.Value, Timestamp = timestamp, DatapointId = datapointId.Value };
 
         await using var scope = services.CreateAsyncScope();
         var valueRepository = scope.ServiceProvider.GetRequiredService<IDatapointValueRepository>();
@@ -74,4 +84,9 @@ public class SubscriberService(
             ? datapointId
             : default(int?);
     }
+}
+
+public class Message
+{
+    public double Value { get; set; }
 }

@@ -1,10 +1,11 @@
 using DashMq.DataAccess;
 using DashMq.DataAccess.Model;
 using Microsoft.AspNetCore.Mvc;
+using MQTTnet.Client;
 
 namespace DashMq.Web.Features.Datapoints;
 
-public class DatapointsController(IDatapointRepository datapointRepository, IDatapointValueRepository valuesRepository) : Controller
+public class DatapointsController(IDatapointRepository datapointRepository, IDatapointValueRepository valuesRepository, IMqttClient mqttClient) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> List(CancellationToken cancellationToken)
@@ -71,8 +72,17 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     }
 
     [HttpPost]
-    public IActionResult Edit(Datapoint model)
+    public async Task<IActionResult> Edit(Datapoint model, CancellationToken cancellationToken)
     {
+        var datapoint = await datapointRepository.GetAsync(model.Id, cancellationToken);
+        if (datapoint == null)
+            return RedirectToAction("ResourceNotFound", "Home");
+
+        datapoint.Name = model.Name;
+        datapoint.Topic = model.Topic;
+
+        await datapointRepository.SaveAsync(cancellationToken);
+
         return RedirectToAction("List");
     }
 
@@ -86,5 +96,13 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
         datapointRepository.Remove(datapoint);
         await datapointRepository.SaveAsync(cancellationToken);
         return RedirectToAction("List");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Click(CancellationToken cancellationToken)
+    {
+        var payload = "{\"message\":\"this is the message\"}";
+        await mqttClient.PublishStringAsync("switch", payload, cancellationToken: cancellationToken);
+        return NoContent();
     }
 }
