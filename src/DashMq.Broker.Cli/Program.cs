@@ -13,6 +13,9 @@ class Program
         // The default endpoint is NOT encrypted!
         // Use the builder classes where possible.
         var mqttServerOptions = new MqttServerOptionsBuilder()
+            .WithoutDefaultEndpoint()
+            //.WithDefaultEndpointPort(1883)
+            //.WithDefaultEndpointBoundIPAddress(IPAddress.Loopback)
             .WithDefaultEndpoint()
             .Build();
 

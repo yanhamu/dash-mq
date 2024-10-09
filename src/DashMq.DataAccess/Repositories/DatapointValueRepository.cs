@@ -8,6 +8,7 @@ public class DatapointValueRepository(DashDbContext context) : IDatapointValueRe
     public Task<DatapointValue[]> ListAsync(int datapointId, LimitOffset limitOffset, CancellationToken cancellationToken)
     {
         return context.DatapointValues
+            .Where(x => x.DatapointId == datapointId)
             .OrderByDescending(x => x.Timestamp)
             .Skip(limitOffset.Offset)
             .Take(limitOffset.Limit)

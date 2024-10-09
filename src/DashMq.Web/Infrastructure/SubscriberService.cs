@@ -1,3 +1,4 @@
+using System.Text.Json;
 using DashMq.DataAccess;
 using DashMq.DataAccess.Model;
 using MQTTnet;
@@ -15,7 +16,7 @@ public class SubscriberService(
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var options = new MqttClientOptionsBuilder()
-            .WithTcpServer("127.0.0.1")
+            .WithTcpServer("localhost")
             .Build();
 
         var subscriberOptionsBuilder = new MqttClientSubscribeOptionsBuilder();
@@ -35,7 +36,8 @@ public class SubscriberService(
         await mqttClient.ConnectAsync(options, cancellationToken);
         mqttClient.ApplicationMessageReceivedAsync += MessageReceivedAsync;
 
-        await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
+        var xxx= await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
+        
     }
 
     private async Task<Datapoint[]> GetDatapoints(CancellationToken cancellationToken)
@@ -57,11 +59,19 @@ public class SubscriberService(
         var datapointId = GetDatapointId(arg.ApplicationMessage.Topic);
         if (!datapointId.HasValue)
             return;
+        
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        
+        var measurement = JsonSerializer.Deserialize<Message>(arg.ApplicationMessage.ConvertPayloadToString(), options);
+        if (measurement == null)
+            return;
 
-        var measurement = Convert.ToDouble(arg.ApplicationMessage.ConvertPayloadToString());
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-        var value = new DatapointValue { Value = measurement, Timestamp = timestamp, DatapointId = datapointId.Value };
+        var value = new DatapointValue { Value = measurement.Value, Timestamp = timestamp, DatapointId = datapointId.Value };
 
         await using var scope = services.CreateAsyncScope();
         var valueRepository = scope.ServiceProvider.GetRequiredService<IDatapointValueRepository>();
@@ -74,4 +84,9 @@ public class SubscriberService(
             ? datapointId
             : default(int?);
     }
+}
+
+public class Message
+{
+    public double Value { get; set; }
 }

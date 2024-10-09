@@ -71,8 +71,17 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     }
 
     [HttpPost]
-    public IActionResult Edit(Datapoint model)
+    public async Task<IActionResult> Edit(Datapoint model, CancellationToken cancellationToken)
     {
+        var datapoint = await datapointRepository.GetAsync(model.Id, cancellationToken);
+        if (datapoint == null)
+            return RedirectToAction("ResourceNotFound", "Home");
+
+        datapoint.Name = model.Name;
+        datapoint.Topic = model.Topic;
+
+        await datapointRepository.SaveAsync(cancellationToken);
+
         return RedirectToAction("List");
     }
 
