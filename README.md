@@ -3,7 +3,7 @@ MQTT Dashboard for IoT
 
 # Missing Features
 - WebSocket Setup!
-- secure MQTT
+- add robust mqtt connection
 - Messages setup for measurements and signals
 - chart for measurements and signals
 - Subscribe
