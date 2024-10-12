@@ -1,6 +1,7 @@
 using DashMq.DataAccess;
 using DashMq.DataAccess.Repositories;
 using DashMq.Web.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MQTTnet;
 using MQTTnet.Client;
@@ -14,6 +15,14 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllersWithViews();
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+                options.AccessDeniedPath = "/Forbidden/";
+                options.LoginPath = "/Security/Login";
+            });
 
         builder.Services.AddTransient<IDatapointRepository, DatapointRepository>();
         builder.Services.AddTransient<IDatapointValueRepository, DatapointValueRepository>();
@@ -24,11 +33,8 @@ public class Program
         var mqttConfig = builder.Configuration.GetSection("MqttBroker").Get<MqttBrokerConfiguration>();
 
         builder.Services.AddSingleton(mqttConfig!);
-        
-        builder.Services.AddDbContext<DashDbContext>(options =>
-        {
-            options.UseSqlite(connectionString: builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
+
+        builder.Services.AddDbContext<DashDbContext>(options => { options.UseSqlite(connectionString: builder.Configuration.GetConnectionString("DefaultConnection")); });
 
         var app = builder.Build();
 
@@ -41,8 +47,14 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
+        var cookiePolicyOptions = new CookiePolicyOptions
+        {
+            MinimumSameSitePolicy = SameSiteMode.Strict,
+        };
+        app.UseCookiePolicy(cookiePolicyOptions);
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(

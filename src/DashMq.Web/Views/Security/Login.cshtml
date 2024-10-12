@@ -1,0 +1,28 @@
+@model DashMq.Web.Features.Security.LoginModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - DashMq.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <form class="text-center" method="post">
+        <div class="mb-3">
+            <h1 class="form-label">Restricted area</h1>
+            <input type="password" name="Password" class="form-control" id="password"/>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </form>
+</div>
+</body>
+</html>

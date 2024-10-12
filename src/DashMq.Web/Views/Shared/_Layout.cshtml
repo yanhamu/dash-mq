@@ -24,8 +24,16 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Datapoints" asp-action="List">Datapoints</a>
                     </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <form id="logoutForm" method="post" action="@Url.Action("Logout", "Security")">
+                            <button type="submit" class="btn btn-link nav-link" style="color: inherit; text-decoration: none;">
+                                Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

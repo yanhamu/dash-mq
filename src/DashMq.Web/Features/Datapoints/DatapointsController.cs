@@ -1,10 +1,12 @@
 using DashMq.DataAccess;
 using DashMq.DataAccess.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MQTTnet.Client;
 
 namespace DashMq.Web.Features.Datapoints;
 
+[Authorize]
 public class DatapointsController(IDatapointRepository datapointRepository, IDatapointValueRepository valuesRepository, IMqttClient mqttClient) : Controller
 {
     [HttpGet]
