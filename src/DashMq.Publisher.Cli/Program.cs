@@ -1,4 +1,5 @@
-﻿using MQTTnet;
+﻿using Microsoft.Extensions.Configuration;
+using MQTTnet;
 using MQTTnet.Client;
 
 namespace DashMq.Publisher.Cli;
@@ -7,12 +8,18 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("config.json", optional: false);
+
+        var config = builder.Build();
+
         Console.WriteLine("Connecting to broker");
         var cancellationTokenSource = new CancellationTokenSource();
 
         using var client = new MqttFactory().CreateMqttClient();
         var options = new MqttClientOptionsBuilder()
-            .WithTcpServer("127.0.0.1")
+            .WithTcpServer(config["tcpServerHost"])
             .Build();
         await client.ConnectAsync(options, cancellationTokenSource.Token);
 

@@ -21,6 +21,10 @@ public class Program
         builder.Services.AddSingleton<IMqttClient>(_ => new MqttFactory().CreateMqttClient());
         builder.Services.AddHostedService<SubscriberService>();
 
+        var mqttConfig = builder.Configuration.GetSection("MqttBroker").Get<MqttBrokerConfiguration>();
+
+        builder.Services.AddSingleton(mqttConfig!);
+        
         builder.Services.AddDbContext<DashDbContext>(options =>
         {
             options.UseSqlite(connectionString: builder.Configuration.GetConnectionString("DefaultConnection"));
