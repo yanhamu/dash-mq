@@ -34,6 +34,7 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
             Id = datapoint.Id,
             Name = datapoint.Name,
             Topic = datapoint.Topic,
+            Direction = datapoint.Direction,
             Values = values.Select(x => new DatapointValueModel { Value = x.Value, Timestamp = x.Timestamp }).ToList(),
         };
         return View(model);
@@ -51,7 +52,8 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
         datapointRepository.Add(new Datapoint()
         {
             Name = model.Name,
-            Topic = model.Topic
+            Topic = model.Topic,
+            Direction = model.Direction,
         });
         await datapointRepository.SaveAsync(cancellationToken);
         return RedirectToAction("List");
@@ -66,9 +68,10 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
 
         return View(new DatapointModel
         {
-            Topic = datapoint.Topic,
-            Name = datapoint.Name,
             Id = datapoint.Id,
+            Name = datapoint.Name,
+            Topic = datapoint.Topic,
+            Direction = datapoint.Direction,
             Values = []
         });
     }
@@ -82,6 +85,7 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
 
         datapoint.Name = model.Name;
         datapoint.Topic = model.Topic;
+        datapoint.Direction = model.Direction;
 
         await datapointRepository.SaveAsync(cancellationToken);
 

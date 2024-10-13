@@ -42,7 +42,7 @@ public class SubscriberService(
 
         await mqttClient.ConnectAsync(options, cancellationToken);
         mqttClient.ApplicationMessageReceivedAsync += MessageReceivedAsync;
-
+        
         var xxx = await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
     }
 

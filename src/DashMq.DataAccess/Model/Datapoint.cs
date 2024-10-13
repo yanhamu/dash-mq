@@ -8,6 +8,14 @@ public class Datapoint
     public int Id { get; set; }
     public string Name { get; set; } = default!;
     public string Topic { get; set; } = default!;
+    public Direction Direction { get; set; }
+}
+
+public enum Direction
+{
+    Invalid = 0,
+    In,
+    Out
 }
 
 public class DataPointMap : IEntityTypeConfiguration<Datapoint>
@@ -32,5 +40,9 @@ public class DataPointMap : IEntityTypeConfiguration<Datapoint>
             .HasColumnName("topic")
             .HasMaxLength(400)
             .IsRequired(false);
+
+        builder.Property(x => x.Direction)
+            .HasColumnName("direction")
+            .IsRequired();
     }
 }

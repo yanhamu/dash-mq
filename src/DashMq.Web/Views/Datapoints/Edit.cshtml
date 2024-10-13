@@ -1,3 +1,4 @@
+@using DashMq.DataAccess.Model
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DashMq.Web.Features.Datapoints.DatapointModel
 
@@ -6,17 +7,31 @@
 <form asp-action="Edit" method="post" class="form-horizontal">
     <div class="mb-3">
         <label for="Id" class="form-label">ID:</label>
-        <input type="text" class="form-control" id="Id" name="Id" value="@Model.Id" readonly />
+        <input type="text" class="form-control" id="Id" name="Id" value="@Model.Id" readonly/>
     </div>
 
     <div class="mb-3">
         <label for="Name" class="form-label">Name:</label>
-        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" />
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name"/>
     </div>
 
     <div class="mb-3">
         <label for="Topic" class="form-label">Topic:</label>
-        <input type="text" class="form-control" id="Topic" name="Topic" value="@Model.Topic" />
+        <input type="text" class="form-control" id="Topic" name="Topic" value="@Model.Topic"/>
+    </div>
+
+
+    <div class="mb-3">
+        <div>
+            <label for="direction" class="form-label me-3">Direction:</label>
+        </div>
+        <div class="btn-group" role="group" id="direction" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="Direction" id="btnradio1" value="In" autocomplete="off" @(Model.Direction == Direction.In ? "checked" : "")>
+            <label class="btn btn-outline-primary" for="btnradio1">In</label>
+
+            <input type="radio" class="btn-check" name="Direction" id="btnradio2" value="Out" autocomplete="off" @(Model.Direction == Direction.Out ? "checked" : "")>
+            <label class="btn btn-outline-primary" for="btnradio2">Out</label>
+        </div>
     </div>
 
     <div class="d-grid gap-2">
