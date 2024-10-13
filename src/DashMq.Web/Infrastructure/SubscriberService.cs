@@ -16,9 +16,15 @@ public class SubscriberService(
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var options = new MqttClientOptionsBuilder()
-            .WithTcpServer(config.TcpHost)
-            .Build();
+        var optionsBuilder = new MqttClientOptionsBuilder()
+            .WithTcpServer(config.TcpHost);
+
+        if (!string.IsNullOrWhiteSpace(config.Password))
+        {
+            optionsBuilder.WithCredentials("", config.Password);
+        }
+
+        var options = optionsBuilder.Build();
 
         var subscriberOptionsBuilder = new MqttClientSubscribeOptionsBuilder();
 
@@ -36,7 +42,7 @@ public class SubscriberService(
 
         await mqttClient.ConnectAsync(options, cancellationToken);
         mqttClient.ApplicationMessageReceivedAsync += MessageReceivedAsync;
-
+        
         var xxx = await mqttClient.SubscribeAsync(subscriberOptions, cancellationToken);
     }
 
