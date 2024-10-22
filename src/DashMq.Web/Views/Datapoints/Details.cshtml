@@ -1,3 +1,4 @@
+@using DashMq.DataAccess.Model
 @model DashMq.Web.Features.Datapoints.DatapointModel
 
 @{
@@ -7,39 +8,64 @@
 
 <h2>DataPoint Details</h2>
 
-<div class="card">
+<div class="card m-2">
     <div class="card-header">
-        DataPoint ID: @Model.Id
+        <h5 class="card-title">@Model.Name</h5>
     </div>
     <div class="card-body">
-        <h5 class="card-title">Name: @Model.Name</h5>
-        <p class="card-text">
-            <strong>Topic:</strong> @Model.Topic
-        </p>
+
+        <table class="table table-borderless">
+            <tbody>
+
+            <tr>
+                <td class="col-2">DataPointId</td>
+                <td class="col-10">@Model.Id</td>
+            </tr>
+            <tr>
+                <td class="col-2">Topic</td>
+                <td class="col-10">@Model.Topic</td>
+            </tr>
+
+            </tbody>
+        </table>
     </div>
 </div>
 
-<button hx-post="/Datapoints/Click" hx-swap="none">
-    Click Me
-</button>
+@if (Model.Direction == Direction.Out)
+{
+    <div class="card m-2">
+        <div class="card-header">
+            Control
+        </div>
+        <div class="card-body">
+            <button class="btn btn-primary" hx-post="/Datapoints/Click" hx-swap="none">
+                Click Me
+            </button>
+        </div>
+    </div>
+}
 
-<a href="@Url.Action("List")" class="btn btn-primary mt-3">Back to List</a>
-
-
-<table>
-    <thead>
-    <tr>
-        <th>Timestamp</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var v in @Model.Values)
-    {
-        <tr>
-            <td>@DateTimeOffset.FromUnixTimeSeconds(v.Timestamp)</td>
-            <td>@v.Value</td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="card m-2">
+    <div class="card-header">
+        <h5 class="card-title">Data</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var v in @Model.Values)
+            {
+                <tr>
+                    <td>@DateTimeOffset.FromUnixTimeSeconds(v.Timestamp).ToString("yyy-MM-dd hh:mm:ss")</td>
+                    <td>@v.Value</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
