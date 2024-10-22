@@ -1,0 +1,9 @@
+@model DashMq.DataAccess.Model.DatapointValue[]
+
+@foreach (var v in @Model)
+{
+    <tr>
+        <td>@DateTimeOffset.FromUnixTimeSeconds(v.Timestamp).ToString("yyy-MM-dd hh:mm:ss")</td>
+        <td>@v.Value</td>
+    </tr>
+}

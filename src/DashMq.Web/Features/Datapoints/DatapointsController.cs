@@ -22,13 +22,13 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     }
 
     [HttpGet]
-    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Details(int id, int? limit, int? offset, CancellationToken cancellationToken)
     {
         var datapoint = await datapointRepository.GetAsync(id, cancellationToken);
         if (datapoint == null)
             return RedirectToAction("ResourceNotFound", "Home");
 
-        var values = await valuesRepository.ListAsync(id, new LimitOffset(100, 0), cancellationToken);
+        var values = await valuesRepository.ListAsync(id, new LimitOffset(limit ?? 20, offset ?? 0), cancellationToken);
         var model = new DatapointModel
         {
             Id = datapoint.Id,
@@ -38,6 +38,13 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
             Values = values.Select(x => new DatapointValueModel { Value = x.Value, Timestamp = x.Timestamp }).ToList(),
         };
         return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Fetch(int id, int? limit, int? offset, CancellationToken cancellationToken)
+    {
+        var values = await valuesRepository.ListAsync(id, new LimitOffset(limit ?? 20, offset ?? 0), cancellationToken);
+        return PartialView("Values", values);
     }
 
     [HttpGet]

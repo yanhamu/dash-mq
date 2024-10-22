@@ -49,8 +49,14 @@
     <div class="card-header">
         <h5 class="card-title">Data</h5>
     </div>
+    <button id="prev-btn" class="btn btn-primary" hx-get="/Datapoints/Fetch?id=@Model.Id" hx-target="#data-table tbody" hx-swap="innerHTML" disabled>
+        Previous
+    </button>
+    <button id="next-btn" class="btn btn-primary" hx-get="/Datapoints/Fetch?id=@Model.Id" hx-target="#data-table tbody" hx-swap="innerHTML">
+        NEXT
+    </button>
     <div class="card-body">
-        <table class="table table-striped">
+        <table class="table table-striped" id="data-table">
             <thead>
             <tr>
                 <th>Timestamp</th>
@@ -69,3 +75,21 @@
         </table>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+    let offset = 0;
+    const limit = 20;
+
+    document.getElementById('next-btn').addEventListener('click', function () {
+        offset += limit;
+        this.setAttribute('hx-vals', `{"offset": ${offset}}`);
+        document.getElementById('prev-btn').disabled = offset === 0;
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', function () {
+        offset = Math.max(0, offset - limit);
+        this.setAttribute('hx-vals', `{"offset": ${offset}}`);
+    });
+</script>
+}
