@@ -56,7 +56,7 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     [HttpPost]
     public async Task<IActionResult> New(DatapointModel model, CancellationToken cancellationToken)
     {
-        datapointRepository.Add(new Datapoint()
+        datapointRepository.Add(new Datapoint
         {
             Name = model.Name,
             Topic = model.Topic,
@@ -112,10 +112,13 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     }
 
     [HttpPost]
-    public async Task<IActionResult> Click(CancellationToken cancellationToken)
+    public async Task<IActionResult> Click(int id, CancellationToken cancellationToken)
     {
+        var datapoint = await datapointRepository.GetAsync(id, cancellationToken);
+        if (datapoint == null)
+            return NotFound();
         var payload = "{\"message\":\"this is the message\"}";
-        await mqttClient.PublishStringAsync("switch", payload, cancellationToken: cancellationToken);
+        await mqttClient.PublishStringAsync(datapoint.Topic, payload, cancellationToken: cancellationToken);
         return NoContent();
     }
 }
