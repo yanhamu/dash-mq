@@ -1,3 +1,5 @@
+@using DashMq.DataAccess.Model
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DashMq.Web.Features.Datapoints.DatapointModel
 
 @{
@@ -16,6 +18,19 @@
     <div class="mb-3">
         <label for="Topic">Topic:</label>
         <input type="text" class="form-control" id="Topic" name="Topic" value="@Model.Topic"/>
+    </div>
+
+    <div class="mb-3">
+        <div>
+            <label for="direction" class="form-label me-3">Direction:</label>
+        </div>
+        <div class="btn-group" role="group" id="direction" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="Direction" id="radioIn" value="In" autocomplete="off" @(Model.Direction == Direction.In ? "checked" : "")>
+            <label class="btn btn-outline-primary" for="radioIn">In</label>
+
+            <input type="radio" class="btn-check" name="Direction" id="radioOut" value="Out" autocomplete="off" @(Model.Direction == Direction.Out ? "checked" : "")>
+            <label class="btn btn-outline-primary" for="radioOut">Out</label>
+        </div>
     </div>
 
     <div class="d-grid gap-2">
