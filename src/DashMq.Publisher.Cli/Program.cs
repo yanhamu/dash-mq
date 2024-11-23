@@ -13,6 +13,7 @@ class Program
             .AddJsonFile("config.json", optional: false);
 
         var config = builder.Build();
+        var password = config["ClientConnectionPassword"];
 
         Console.WriteLine("Connecting to broker");
         var cancellationTokenSource = new CancellationTokenSource();
@@ -20,6 +21,7 @@ class Program
         using var client = new MqttFactory().CreateMqttClient();
         var options = new MqttClientOptionsBuilder()
             .WithTcpServer(config["tcpServerHost"])
+            .WithCredentials("", password)
             .Build();
         await client.ConnectAsync(options, cancellationTokenSource.Token);
 

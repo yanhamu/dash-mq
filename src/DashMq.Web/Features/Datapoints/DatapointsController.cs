@@ -13,12 +13,30 @@ public class DatapointsController(IDatapointRepository datapointRepository, IDat
     public async Task<IActionResult> List(CancellationToken cancellationToken)
     {
         var datapoints = await datapointRepository.ListAsync(cancellationToken);
-        return View(datapoints.Select(x => new DatapointModel()
+
+        var items = datapoints.Select(x => new DatapointListModel
         {
             Id = x.Id,
             Name = x.Name,
-            Topic = x.Topic
-        }).ToArray());
+            Topic = x.Topic,
+            Direction = x.Direction,
+        }).ToArray();
+
+        var values = await valuesRepository.GetAsync(datapoints.Select(x => x.Id).ToArray(), cancellationToken);
+        var datapointValues = values.ToDictionary(k => k.Id);
+        foreach (var i in items)
+        {
+            if (datapointValues.TryGetValue(i.Id, out var datapointValue))
+            {
+                i.LastValue = new DatapointValueModel
+                {
+                    Timestamp = datapointValue.Timestamp,
+                    Value = datapointValue.Value
+                };
+            }
+        }
+
+        return View(items);
     }
 
     [HttpGet]

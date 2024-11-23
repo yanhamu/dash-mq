@@ -20,6 +20,7 @@ class Program
         using var client = new MqttFactory().CreateMqttClient();
         var options = new MqttClientOptionsBuilder()
             .WithTcpServer(config["tcpServerHost"])
+            
             .Build();
 
         var subscribeOptions = new MqttClientSubscribeOptionsBuilder().WithTopicFilter("temperature").Build();

@@ -24,7 +24,7 @@ public class Runner : BackgroundService
 
         if (password != null && arg.Password != password)
         {
-            Console.WriteLine($"Arrived pwd {arg.Password}");
+            Console.WriteLine($"Arrived pwd {arg.Password} != {password}");
             arg.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
         }
 

@@ -16,7 +16,8 @@ public class Program
                     .AddJsonFile("config.json", optional: false);
 
                 var config = builder.Build();
-                services.AddSingleton(config);
+                
+                services.AddSingleton<IConfiguration>(config);
                 services.AddHostedService<Runner>();
             })
             .Build();

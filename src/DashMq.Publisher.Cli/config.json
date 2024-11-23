@@ -1,3 +1,4 @@
 {
-  "tcpServerHost": "localhost"
+  "tcpServerHost": "localhost",
+  "ClientConnectionPassword": ""
 }

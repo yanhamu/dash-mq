@@ -1,4 +1,5 @@
-@model DashMq.Web.Features.Datapoints.DatapointModel[]
+@using DashMq.DataAccess.Model
+@model DashMq.Web.Features.Datapoints.DatapointListModel[]
 
 @{
     ViewData["Title"] = "Datapoints";
@@ -15,6 +16,7 @@
         <tr>
             <th>Name</th>
             <th>Topic</th>
+            <th></th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -28,6 +30,17 @@
                     </a>
                 </td>
                 <td>@v.Topic</td>
+                <td>@if (v.Direction == Direction.In)
+                    {
+                        @v.LastValue?.Value
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" hx-post="/Datapoints/Click?id=@v.Id" hx-swap="none">
+                            Click Me
+                        </button>
+                    }
+                </td>
                 <td>
                     <a href="@Url.Action("Edit", new { id = v.Id })" class="btn btn-warning btn-sm">
                         Edit
